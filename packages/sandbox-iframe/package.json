@@ -1,34 +1,40 @@
 {
-    "name": "@minister/sandbox-iframe",
-    "version": "0.0.0",
-    "description": "> TODO: description",
-    "homepage": "",
-    "license": "ISC",
-    "main": "dist/index.js",
-    "module": "dist/index.esm.js",
-    "directories": {
-        "dist": "dist",
-        "test": "__tests__"
-    },
-    "files": [
-        "dist"
-    ],
-    "scripts": {
-        "test": "jest",
-        "start": "nore start",
-        "build": "nore build"
-    },
-    "dependencies": {
-        "@minister/utils": "^0.0.0",
-        "core-js": "3"
-    },
-    "devDependencies": {
-        "@jest/globals": "^29.5.0",
-        "@norejs/cli": "^0.0.5",
-        "@types/jest": "^29.5.0",
-        "@types/node": "^18.15.10",
-        "jest": "^29.5.0",
-        "jest-environment-jsdom": "^29.5.0",
-        "ts-jest": "^29.0.5"
-    }
+  "name": "@minister/sandbox-iframe",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "homepage": "",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "directories": {
+    "dist": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "jest",
+    "start": "nore start",
+    "build": "nore build"
+  },
+  "dependencies": {
+    "@minister/utils": "^0.0.0",
+    "core-js": "3"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.5.0",
+    "@norejs/cli": "^0.0.5",
+    "@playwright/test": "^1.37.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.10",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "jest-puppeteer": "^9.0.0",
+    "puppeteer": "^21.0.3",
+    "ts-jest": "^29.0.5"
+  },
+  "volta": {
+    "node": "16.20.2"
+  }
 }

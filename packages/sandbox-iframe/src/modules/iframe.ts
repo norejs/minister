@@ -18,7 +18,8 @@ const reflectEvents = ["hashchange", "popstate"];
 // strin转换为 blob url
 function objectToBlobUrl(object: any) {
     const blob = new Blob([object], { type: "text/html" });
-    return URL.createObjectURL(blob);
+    console.log("pz", blob,global.URL.createObjectURL);
+    return global.URL.createObjectURL(blob);
 }
 function toUpperFirstCase(word: string) {
     return word.replace(/^\w/, w => w.toUpperCase());

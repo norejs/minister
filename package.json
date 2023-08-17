@@ -1,10 +1,14 @@
 {
     "name": "minister-packages",
     "private": true,
-    "scripts": {},
+    "scripts": {
+        "start": "nx run-many --target=start --projects=main-vite,child-react17 --parallel"
+    },
     "devDependencies": {
+        "@changesets/cli": "^2.26.2",
         "nx": "^16.7.1",
-        "nx-cloud": "16.4.0-beta.1"
+        "nx-cloud": "16.4.0-beta.1",
+        "tslib": "^2.6.1"
     },
     "workspace": [
         "packages/*",
@@ -12,8 +16,5 @@
     ],
     "volta": {
         "node": "14.21.3"
-    },
-    "dependencies": {
-        "@changesets/cli": "^2.26.2"
     }
 }

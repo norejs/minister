@@ -63,7 +63,7 @@ export default class MWindow {
         this.init(options);
     }
     init(options) {
-        const { appName, url = "", initValues = {}, document, location } = options;
+        const { appName, url = "", initValues = {} } = options;
         const miniWindow = {
             __MINI_APP_ENVIRONMENT__: true,
             __MINI_APP_NAME__: appName,

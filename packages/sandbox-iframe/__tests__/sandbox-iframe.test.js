@@ -1,7 +1,9 @@
-'use strict';
+/**
+ * @jest-environment jsdom
+ */
 
-const sandboxIframe = require('..');
-const assert = require('assert').strict;
-
-assert.strictEqual(sandboxIframe(), 'Hello from sandboxIframe');
-console.info("sandboxIframe tests passed");
+test('use jsdom in this test file', () => {
+    const sandboxIframe = require('..');
+    const sandbox = new sandboxIframe();
+    expect(sandbox).toBeInstanceOf(sandboxIframe);
+});

@@ -9,6 +9,7 @@ declare global {
         Node: any;
     }
 }
+
 function tryBindFunctionToRaw(raw, fn) {
     return typeof fn === 'function' && !isBoundFunction(fn) ? fn.bind(raw) : fn;
 }
