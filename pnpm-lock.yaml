@@ -326,7 +326,7 @@ importers:
 
   demos/sandbox-test:
     specifiers:
-      '@minister/sandbox-iframe': ^0.0.0
+      '@minister/sandbox-iframe': workspace:^0.0.0
       '@minister/utils': ^0.0.0
       '@parcel/transformer-sass': ^2.8.3
       chokidar: ^3.5.3
@@ -335,13 +335,13 @@ importers:
       react-dom: ^18.2.0
       react-router-dom: ^6.11.1
     dependencies:
+      '@minister/sandbox-iframe': link:../../packages/sandbox-iframe
       '@minister/utils': link:../../packages/utils
       chokidar: 3.5.3
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-router-dom: 6.15.0_biqbaboplfbrettd7655fr4n2y
     devDependencies:
-      '@minister/sandbox-iframe': link:../../packages/sandbox-iframe
       '@parcel/transformer-sass': 2.9.3
       parcel: 2.9.3
 

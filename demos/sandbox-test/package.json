@@ -15,11 +15,11 @@
         }
     },
     "devDependencies": {
-        "@minister/sandbox-iframe": "^0.0.0",
         "@parcel/transformer-sass": "^2.8.3",
         "parcel": "^2.8.3"
     },
     "dependencies": {
+        "@minister/sandbox-iframe": "workspace:^0.0.0",
         "@minister/utils": "^0.0.0",
         "chokidar": "^3.5.3",
         "react": "^18.2.0",
