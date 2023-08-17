@@ -2,22 +2,16 @@
     "name": "minister-packages",
     "private": true,
     "scripts": {
-        "start": "nx run-many --target=start --projects=main-vite,child-react17 --parallel",
-        "build": "nx run-many --target=build --projects=packages/* --parallel",
-        "test": "nx run-many --target=test --projects=packages/* --parallel",
-        "lint": "nx run-many --target=lint --projects=packages/* --parallel",
+        "build": "turbo run build",
+        "test": "turbo run test",
+        "lint": "turbo run lint",
         "graph": "nx dep-graph"
     },
     "devDependencies": {
         "@changesets/cli": "^2.26.2",
-        "nx": "^16.7.1",
-        "nx-cloud": "16.4.0-beta.1",
-        "tslib": "^2.6.1"
+        "tslib": "^2.6.1",
+        "turbo": "^1.10.12"
     },
-    "workspace": [
-        "packages/*",
-        "demos/*"
-    ],
     "volta": {
         "node": "14.21.3"
     }

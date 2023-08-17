@@ -27,5 +27,5 @@
         "react-router-dom": "^6.11.1"
     },
     "watcher": "node_modules/@minister/",
-    "devVersion": 0
+    "devVersion": 1
 }
