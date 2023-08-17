@@ -4,7 +4,7 @@
     "scripts": {
         "start": "lerna run start --parallel --loglevel verbose",
         "start:lib": "lerna run start --parallel --loglevel verbose --scope=minister --scope=@minister/sandbox-iframe --scope=@minister/utils",
-        "demos": "lerna run start --parallel --loglevel verbose --scope main-vite",
+        "demos": "lerna run start --parallel --loglevel verbose --scope main-vite --scope child-react17",
         "start:sandbox": "lerna run start --parallel --loglevel verbose --scope @minister/sandbox-iframe"
     },
     "devDependencies": {

@@ -1,7 +1,8 @@
+import React from 'react';
+
 /**
  * 在react jsx被解析的时候  添加自定义事件监听， （如从type为micro-app 的props上找到所有的符合eventLifeCycles中的挂载方法 如oncreated ） 然后在app的合适的生命周期的时机，被触发
  */
-const React = require('react');
 // 定义合法的 lifecycles
 const eventLifeCycles = ['oncreated', 'onbeforemount', 'onmounted', 'onunmount', 'onerror', 'ondatachange', 'onbeforeshow', 'onaftershow', 'onafterhidden'];
 function jsxCustomEvent(type, props, ...children) {

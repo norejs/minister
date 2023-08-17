@@ -1,8 +1,5 @@
 import {
     isBoundFunction,
-    isPlainObject,
-    isString,
-    logWarn,
 } from '@minister/utils';
 import MiniProxy from '../libs/mini-proxy';
 declare global {
@@ -166,7 +163,6 @@ export default class MDocument {
         rawMethod,
         source = ''
     ) => {
-        debugger;
         console.log(
             'handleAddElement',
             this.options.rootElement,
@@ -177,10 +173,8 @@ export default class MDocument {
             source
         );
         if (this.options.rootElement.contains(parent)) {
-            debugger;
             const { onAddElement } = this.options;
             if (onAddElement) {
-                debugger;
                 const replaceElement = onAddElement(
                     parent,
                     newChild,
@@ -192,7 +186,6 @@ export default class MDocument {
                 if (replaceElement) {
                     return rawMethod.call(parent, replaceElement, passiveChild);
                 } else {
-                    debugger;
                     return rawMethod.call(parent, newChild, passiveChild);
                 }
             }
@@ -200,10 +193,8 @@ export default class MDocument {
             if (newChild && newChild.id && !isNaN(newChild.id[0])) {
                 newChild.id = 'mini-app-' + newChild.id;
             }
-            debugger;
             return rawMethod.call(parent, newChild, passiveChild);
         } else {
-            debugger;
             return rawMethod.call(parent, newChild, passiveChild);
         }
     };
