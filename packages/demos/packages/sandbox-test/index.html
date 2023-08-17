@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>iframe sandbox test</title>
+        <script type="module" src="index.ts"></script>
+    </head>
+    <body>
+        <div>
+            <a href="#/test/about">跳转到子应用about</a>
+        </div>
+        <div id="root">
+            <mini-app>
+                <mini-app-head></mini-app-head>
+                <mini-app-body>
+                    <div id="root"></div>
+                </mini-app-body>
+            </mini-app>
+            <!-- <iframe src="child.html">
+
+            </iframe> -->
+        </div>
+    </body>
+</html>
