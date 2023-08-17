@@ -38,7 +38,7 @@ export default class ConsumerWrapper extends Component {
     }
 
     componentWillUnmount() {
-        const { value, ctx, id } = this.props;
+        const { value, ctx } = this.props;
         if (isUndefined(value)) {
             return;
         }

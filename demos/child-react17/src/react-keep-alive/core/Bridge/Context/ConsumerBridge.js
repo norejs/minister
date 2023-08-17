@@ -1,17 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, {
     PureComponent,
-    useContext,
-    useRef,
-    useEffect,
-    useState,
 } from "react";
-import { run, get, nextTick } from "../../../utils";
-import { isUndefined, isFunction } from "../../../helpers/is";
-// import { run, get, nextTick, isUndefined, isFunction } from 'szfe-tools'
 
 import ConsumerWrapper from "./ConsumerWrapper";
-import { fixedContext, eventBus, updateListenerCache } from "./fixContext";
+import { fixedContext } from "./fixContext";
 
 const fixedContextSnapshot = {};
 

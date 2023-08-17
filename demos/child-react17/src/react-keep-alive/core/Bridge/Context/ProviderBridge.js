@@ -19,7 +19,7 @@ export default class ProviderBridge extends PureComponent {
             return;
         }
 
-        const [{ ctx, value, onUpdate }] = ctxValues;
+        const [{value, onUpdate }] = ctxValues;
 
         this.state = {
             ctxValue: value,

@@ -1,6 +1,5 @@
 import { render } from "react-dom";
 import { HashRouter, Routes, Route } from "react-router-dom";
-import { AliveScope, KeepAlive } from "./react-keep-alive";
 
 import Expenses, { Item } from "./views/Expenses.jsx";
 import Invoices from "./views/Invoices.jsx";
