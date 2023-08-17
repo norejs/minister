@@ -14,13 +14,6 @@
     "files": [
         "dist"
     ],
-    "publishConfig": {
-        "registry": "http://nexus.pajk-ent.com/repository/npm-all/"
-    },
-    "repository": {
-        "type": "git",
-        "url": "ssh://liupeng928@gerrit.pajk-ent.com:29418/minister"
-    },
     "scripts": {
         "test": "echo \"Error: run tests from root\" && exit 1",
         "start": "latte start",

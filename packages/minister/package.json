@@ -13,10 +13,6 @@
         "prepublishOnly": "yarn lint && yarn build",
         "postinstall": "whousepkg"
     },
-    "repository": {
-        "type": "git",
-        "url": "git@gitlab.pajk-ent.com:CAOYE650/micro-app.git"
-    },
     "publishConfig": {
         "access": "public"
     },

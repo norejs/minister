@@ -14,13 +14,6 @@
     "files": [
         "dist"
     ],
-    "publishConfig": {
-        "registry": "http://nexus.pajk-ent.com/repository/npm-all/"
-    },
-    "repository": {
-        "type": "git",
-        "url": "ssh://liupeng928@gerrit.pajk-ent.com:29418/minister"
-    },
     "scripts": {
         "test": "jest",
         "start": "latte start",
@@ -35,7 +28,6 @@
     },
     "devDependencies": {
         "@jest/globals": "^29.5.0",
-        "@latte/cli": "^2.0.0",
         "@types/jest": "^29.5.0",
         "@types/node": "^18.15.10",
         "jest": "^29.5.0",

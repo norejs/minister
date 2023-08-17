@@ -1,62 +1,38 @@
-import React from "react";
-import ReactDOM, { render } from "react-dom";
-import minister from "minister";
-import { HashRouter, Routes, Route } from "react-router-dom";
-import App from "./App";
-import ChildPage from "./views/ChildPage";
-import Order from "./views/Order";
-import MyDropdown from "./views/MyDropdown.jsx";
-import MyTrade from "./views/MyTrade.jsx";
-import Shop from "./views/Shop";
-import Plugin from "./views/plugin";
-import "./index.css";
+import React from 'react';
+import ReactDOM, { render } from 'react-dom';
+import minister from 'minister';
+import { HashRouter, Routes, Route } from 'react-router-dom';
+import App from './App';
+import ChildPage from './views/ChildPage';
+import Order from './views/Order';
+import MyDropdown from './views/MyDropdown.jsx';
+import MyTrade from './views/MyTrade.jsx';
+import Shop from './views/Shop';
+import Plugin from './views/plugin';
+import './index.css';
 // 注意这里这样引用是使用了alias且注释了ModuleScopePlugin插件。
 // ModuleScopePlugin插件: 限制src目录的（使用的额外的解析插件列表，使用ModuleScopePlugin限制自己编写的模块只能从src目录中引入）
 // import microApp from "micro-app-origin/micro-app";
 
-
 window.onload = function () {
     alert('onload');
-}
-window.addEventListener("load", function (e) {
+};
+window.addEventListener('load', function (e) {
     console.log(document.body);
 });
-window.addEventListener("Dom", function (e) {
+window.addEventListener('Dom', function (e) {
     console.log(document.body);
 });
 // 提供给子应用公用的react版本 取决于父应用的react版本
 window.React = React;
 window.ReactDOM = ReactDOM;
 
-const apps = [
-    {
-        name: "shop",
-        route: "/shop",
-        url: "//www.test.pajkdc.com/shop/",
-    },
-    {
-        name: "plugin",
-        route: "/plugin",
-        url: "//www.test.pajkdc.com/yao-h5/",
-    },
-];
-
 function matchChildApp(url) {
-    return apps.find(app => url.indexOf(app.url.replace(/^https?:/, "")) > -1);
-}
-
-// 解析指定url的hash和query
-function parseUrl(url) {
-    const [pathname, hash] = url.split("#");
-    const search = pathname.split("#")[1];
-    return {
-        hash,
-        search,
-    };
+    return true;
 }
 
 minister.start({
-    tagName: "mini-app",
+    tagName: 'mini-app',
     inline: true,
     shadowDOM: false,
     // 开启缓存
@@ -67,29 +43,18 @@ minister.start({
     lifeCycles: {
         // * created, beforemount, mounted, unmount, error
         created(e) {
-            console.log("created");
+            console.log('created');
         },
     },
     events: {
-        onRedirect: event => {
-            const { url } = event;
-            const matchedApp = matchChildApp(url);
-            if (matchedApp) {
-                const { route } = matchedApp;
-                // TODO: 对于search 无法传参
-                const { hash } = parseUrl(url);
-                // 重定向到子应用的路由 会出现search 丢失的问题
-                window.location.href = `#${route}${hash}`;
-                return false;
-            }
-        },
+        onRedirect: (event) => {},
     },
     // cacheStrategy: "lru",
     // cacheCapacity: 1,
 });
 
 // 如需使用 history模式 ，直接将HashRouter替换为BrowserRouter [指南Tutorial](https://reactrouter.com/docs/en/v6/getting-started/tutorial)
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 
 render(
     <HashRouter>
@@ -104,7 +69,7 @@ render(
             <Route
                 path="*"
                 element={
-                    <main style={{ padding: "1rem" }}>
+                    <main style={{ padding: '1rem' }}>
                         <p>父应用未匹配到路由 There's nothing here!</p>
                     </main>
                 }
