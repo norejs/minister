@@ -12,5 +12,8 @@
     ],
     "volta": {
         "node": "14.21.3"
+    },
+    "dependencies": {
+        "@changesets/cli": "^2.26.2"
     }
 }
