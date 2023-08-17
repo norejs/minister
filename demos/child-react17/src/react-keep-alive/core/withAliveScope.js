@@ -36,7 +36,6 @@ export const expandKeepAlive = (KeepAlive) => {
             <NodeKey prefix={idPrefix} key={props._nk}>
                 {
                     (id) => {
-                        console.log("🐔fuck nodeKey", id);
                         return (
                             <Acceptor key={id} id={id}>
                                 {(bridgeProps) => (
@@ -60,7 +59,6 @@ export const expandKeepAlive = (KeepAlive) => {
     };
 
     const WithExpand = ({ id: idPrefix, ...props }) => {
-        console.log("🐔render WithExpand", props);
         return (
             <AliveScopeConsumer>
                 {(helpers) => renderContent({ idPrefix, helpers, props })}

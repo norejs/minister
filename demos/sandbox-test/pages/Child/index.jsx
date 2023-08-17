@@ -7,8 +7,6 @@ function checkQueryDom() {
     const queryMethod = [];
     const body = document.body;
     const head = document.head;
-    console.log("body", body);
-    console.log("head", head);
 }
 
 checkQueryDom();

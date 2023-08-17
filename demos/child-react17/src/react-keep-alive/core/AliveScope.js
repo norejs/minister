@@ -56,7 +56,6 @@ export default class AliveScope extends Component {
                 resolve(this.store.get(id));
             });
         });
-        console.log("fuck", ret);
         return ret;
         // return new Promise((resolve) => {
         //     this.update(id, {

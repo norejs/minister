@@ -1,11 +1,11 @@
-import extractHtml from "./source";
-import { APP_STATUS, LIFECYCLES } from "./constants";
-import { cloneContainer } from "./libs/utils";
-import dispatchLifecyclesEvent from "./interact/lifecycles_event";
-import SandBoxIframe from "@minister/sandbox-iframe";
-import { cacheMaps } from "./cache";
-import minister from "./minister";
-import { isRelativeUrl } from "@minister/utils";
+import extractHtml from './source';
+import { APP_STATUS, LIFECYCLES } from './constants';
+import { cloneContainer } from './libs/utils';
+import dispatchLifecyclesEvent from './interact/lifecycles_event';
+import SandBoxIframe from '@minister/sandbox-iframe';
+import { cacheMaps } from './cache';
+import minister from './minister';
+import { isRelativeUrl } from '@minister/utils';
 /**
  * micro app instances
  * @type {Map<string, CreateApp>}
@@ -24,14 +24,14 @@ export const appInstanceMap = new Map();
  */
 export default class CreateApp {
     constructor({
-        tagName = "",
-        name = "",
-        url = "",
+        tagName = '',
+        name = '',
+        url = '',
         container = null,
         useSandbox = true,
         scopecss = true,
         inline = false,
-        baseroute = "",
+        baseroute = '',
     }) {
         this.tagName = tagName;
         this.name = name;
@@ -97,12 +97,17 @@ export default class CreateApp {
         // 缓存case处理
         // 如果挂载到一个新的container上，需要重新clone一份
         this.container = newContainer ? newContainer : this.container;
+
         // js资源未加载完全检测
         if (this.loadSourceLevel !== 1) {
             this.status = APP_STATUS.LOADING_SOURCE_CODE;
             return;
         }
-        dispatchLifecyclesEvent(this.container, this.name, LIFECYCLES.BEFOREMOUNT);
+        dispatchLifecyclesEvent(
+            this.container,
+            this.name,
+            LIFECYCLES.BEFOREMOUNT
+        );
         // 开始挂载到dom：this.container
         this.status = APP_STATUS.MOUNTING;
 
@@ -120,19 +125,17 @@ export default class CreateApp {
                 html: this.source.html,
                 // styles: [],
                 scripts,
-                onHashChange: url => {
-                    console.log("onhashchange", url);
-                },
-                onPopState: url => {
-                    console.log("onpopstate", url);
-                },
+                onHashChange: (url) => {},
+                onPopState: (url) => {},
                 onReady: () => {
-                    console.log("onReady",this.container,this.sandbox.getRootElement());
                     this.container.appendChild(this.sandbox.getRootElement());
                     this.dispatchMountedEvent();
                 },
                 onRedirect: this.onRedirect.bind(this),
             });
+        } else if (this.sandbox.getRootElement()) {
+            this.container.appendChild(this.sandbox.getRootElement());
+            this.dispatchMountedEvent();
         }
     }
     onRedirect(url, type) {
@@ -140,7 +143,13 @@ export default class CreateApp {
         if (isRelativeUrl(url, this.url)) {
             return true;
         }
-        const event = dispatchLifecyclesEvent(this.container, this.name, LIFECYCLES.DIRECT, undefined, { url, type });
+        const event = dispatchLifecyclesEvent(
+            this.container,
+            this.name,
+            LIFECYCLES.DIRECT,
+            undefined,
+            { url, type }
+        );
 
         return event.defaultPrevented ? true : false;
     }
@@ -150,7 +159,11 @@ export default class CreateApp {
     dispatchMountedEvent() {
         if (APP_STATUS.UNMOUNT !== this.status) {
             this.status = APP_STATUS.MOUNTED;
-            dispatchLifecyclesEvent(this.container, this.name, LIFECYCLES.MOUNTED);
+            dispatchLifecyclesEvent(
+                this.container,
+                this.name,
+                LIFECYCLES.MOUNTED
+            );
         }
     }
 
@@ -184,7 +197,10 @@ export default class CreateApp {
 
         // 销毁缓存实例
         if (destory) {
-            console.log("完全删除该appName,下次访问需重新请求改app资源", appInstanceMap);
+            console.log(
+                '完全删除该appName,下次访问需重新请求改app资源',
+                appInstanceMap
+            );
             appInstanceMap.delete(this.name);
             this.sandBox = null;
         }
@@ -203,7 +219,11 @@ export default class CreateApp {
         const cacheMap = cacheMaps.get(this.tagName);
         this.status = APP_STATUS.KEEP_ALIVE_HIDDEN;
 
-        dispatchLifecyclesEvent(this.container, this.name, LIFECYCLES.AFTERHIDDEN);
+        dispatchLifecyclesEvent(
+            this.container,
+            this.name,
+            LIFECYCLES.AFTERHIDDEN
+        );
 
         // 将当前的dom节点 去除外层结果，并克隆/移动到新节点 <micro-app> ...x </micro-app> => <div>...x</div>
         // 注意⚠️: cloneContainer如果是浅复制，会将this.container中的dom节点移动到this.keepAliveContainer中，移动后，this.container就变成了一个空节点
@@ -211,13 +231,13 @@ export default class CreateApp {
             this.container,
             this.keepAliveContainer
                 ? this.keepAliveContainer
-                : (this.keepAliveContainer = document.createElement("div")),
+                : (this.keepAliveContainer = document.createElement('div')),
             false
         );
 
         if (isStrategy) {
             cacheMap?.put(eleInstance.appName, this.keepAliveContainer);
-            console.log("fuck cacheMap", cacheMap);
+            console.log('fuck cacheMap', cacheMap);
         }
         // 存储新dom节点
         this.container = this.keepAliveContainer;
@@ -245,7 +265,11 @@ export default class CreateApp {
         this.status = APP_STATUS.KEEP_ALIVE_SHOW;
 
         // dispatch aftershow event to base app
-        dispatchLifecyclesEvent(this.container, this.name, LIFECYCLES.AFTERSHOW);
+        dispatchLifecyclesEvent(
+            this.container,
+            this.name,
+            LIFECYCLES.AFTERSHOW
+        );
     }
     destory() {}
 }

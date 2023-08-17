@@ -85,7 +85,6 @@ class KeepAlive extends Component {
                 }
 
                 const cached = lifecycleName === LIFECYCLE_UNACTIVATE;
-                console.log("fuck trigger unactivate", lifecycleName);
 
                 // 若组件即将卸载则不再触发缓存生命周期
                 if (!cache || cache.willDrop) {
