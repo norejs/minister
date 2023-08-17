@@ -2,7 +2,6 @@
   "name": "@minister/docs",
   "version": "0.0.0",
   "description": "> TODO: description",
-  "author": "pengzai <liupeng928@jk.cn>",
   "homepage": "",
   "license": "ISC",
   "main": "lib/docs.js",
