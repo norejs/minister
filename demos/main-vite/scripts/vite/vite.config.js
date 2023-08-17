@@ -25,7 +25,7 @@ export default defineConfig({
             },
             {
                 find: '@minister/sandbox',
-                replacement: resolvePkgPath('sandbox'),
+                replacement: resolvePkgPath('sandbox-iframe'),
             },
         ],
     },
