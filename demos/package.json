@@ -24,9 +24,6 @@
     "scripts": {
         "demos": "lerna run start --parallel --loglevel verbose --scope main --scope main --scope child-react17"
     },
-    "workspaces": [
-        "packages/*"
-    ],
     "devDependencies": {
         "@jest/globals": "^29.5.0",
         "@types/jest": "^29.5.0",
