@@ -27,12 +27,10 @@
         "build": "latte build"
     },
     "dependencies": {
-        "@latte/whousepkg": "^2.0.0",
         "core-js": "3"
     },
     "devDependencies": {
         "@jest/globals": "^29.5.0",
-        "@latte/cli": "^2.0.0",
         "@types/jest": "^29.5.0",
         "jest": "^29.5.0",
         "jest-environment-jsdom": "^29.5.0",

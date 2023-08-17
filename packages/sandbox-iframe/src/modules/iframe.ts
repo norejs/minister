@@ -92,7 +92,7 @@ export default class MIframe {
         // 构建初始化HTML
     }
     createIframe() {
-        const { onReady, url, appName, hash = "#/" } = this.options;
+        const { url, appName, hash = "#/" } = this.options;
         // TODO: 代码分割
         this.iframe = document.createElement("iframe");
         this.iframe.style.display = "none";
@@ -130,7 +130,6 @@ export default class MIframe {
                 this.window = this.iframe.contentWindow;
                 this.document = this.iframe.contentDocument;
                 resolve(this.iframe);
-
                 // URL.revokeObjectURL(iframeUrl);
             };
             document.body.appendChild(this.iframe);

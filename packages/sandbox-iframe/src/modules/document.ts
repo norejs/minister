@@ -1,5 +1,10 @@
-import { isBoundFunction, isPlainObject, isString, logWarn } from "@minister/utils";
-import MiniProxy from "../libs/mini-proxy";
+import {
+    isBoundFunction,
+    isPlainObject,
+    isString,
+    logWarn,
+} from '@minister/utils';
+import MiniProxy from '../libs/mini-proxy';
 declare global {
     interface Window {
         Element: any;
@@ -8,7 +13,7 @@ declare global {
     }
 }
 function tryBindFunctionToRaw(raw, fn) {
-    return typeof fn === "function" && !isBoundFunction(fn) ? fn.bind(raw) : fn;
+    return typeof fn === 'function' && !isBoundFunction(fn) ? fn.bind(raw) : fn;
 }
 
 export default class MDocument {
@@ -18,14 +23,38 @@ export default class MDocument {
         this.initProxy();
     }
     handleAddEventListener(type, listener, options) {
-        if (["click", "touchstart", "touchmove", "touchend", "touchcancel"].includes(type)) {
-            return this.options.rootElement.addEventListener(type, listener, options);
+        if (
+            [
+                'click',
+                'touchstart',
+                'touchmove',
+                'touchend',
+                'touchcancel',
+            ].includes(type)
+        ) {
+            return this.options.rootElement.addEventListener(
+                type,
+                listener,
+                options
+            );
         }
         return this.rawDocument.addEventListener(type, listener, options);
     }
     handleRemoveEventListener(type, listener, options) {
-        if (["click", "touchstart", "touchmove", "touchend", "touchcancel"].includes(type)) {
-            return this.options.rootElement.removeEventListener(type, listener, options);
+        if (
+            [
+                'click',
+                'touchstart',
+                'touchmove',
+                'touchend',
+                'touchcancel',
+            ].includes(type)
+        ) {
+            return this.options.rootElement.removeEventListener(
+                type,
+                listener,
+                options
+            );
         }
         return this.rawDocument.addEventListener(type, listener, options);
     }
@@ -34,7 +63,7 @@ export default class MDocument {
             target: initTarget = {},
             appName,
             rootElement,
-            subElementPrefix = "mini-app-",
+            subElementPrefix = 'mini-app-',
             onInjectScript: Function,
             rawWindow,
         } = this.options;
@@ -51,34 +80,51 @@ export default class MDocument {
                     //         const element = rawDocument[key].apply(rawDocument, args);
                     //         return markElement(element, appName, key, args);
                     //     }).bind(rawDocument);
-                    case "querySelector":
-                    case "querySelectorAll":
+                    case 'querySelector':
+                    case 'querySelectorAll':
                         // 替换html,head和body
                         return (...args) => {
-                            args[0] = args[0].replace(/(^|[^.#])\b(body|html|head)\b/gi, `$1${subElementPrefix}$2`);
-                            const elements = rootElement[key].call(rootElement, ...args);
+                            args[0] = args[0].replace(
+                                /(^|[^.#])\b(body|html|head)\b/gi,
+                                `$1${subElementPrefix}$2`
+                            );
+                            const elements = rootElement[key].call(
+                                rootElement,
+                                ...args
+                            );
                             // markElement(elements, appName, key, args);
                             return elements;
                         };
-                    case "getElementsByTagName":
+                    case 'getElementsByTagName':
                         return (...args) => {
-                            args[0] = args[0].replace(/(^|[^.#])\b(body|html|head)\b/gi, `$1${subElementPrefix}$2`);
-                            const elements = rootElement["querySelectorAll"].call(rootElement, ...args);
+                            args[0] = args[0].replace(
+                                /(^|[^.#])\b(body|html|head)\b/gi,
+                                `$1${subElementPrefix}$2`
+                            );
+                            const elements = rootElement[
+                                'querySelectorAll'
+                            ].call(rootElement, ...args);
                             // markElement(elements, appName, key, args);
                             return elements;
                         };
-                    case "getElementsByClassName":
-                        return className => {
-                            const elements = rootElement["querySelectorAll"].call(rootElement, " ." + key);
+                    case 'getElementsByClassName':
+                        return (className) => {
+                            const elements = rootElement[
+                                'querySelectorAll'
+                            ].call(rootElement, ' .' + key);
                             // markElement(elements, appName, className, className);
                             return elements;
                         };
-                    case "getElementById":
-                        return id => {
+                    case 'getElementById':
+                        return (id) => {
                             try {
-                                const myid = isNaN(id[0]) ? id.toString() : "mini-app-" + id;
-                                const elements = rootElement["querySelector"].call(rootElement, "#" + myid);
-                                console.log("getElementById",id, elements);
+                                const myid = isNaN(id[0])
+                                    ? id.toString()
+                                    : 'mini-app-' + id;
+                                const elements = rootElement[
+                                    'querySelector'
+                                ].call(rootElement, '#' + myid);
+                                console.log('getElementById', id, elements);
                                 // markElement(elements, appName, key, id);
                                 return elements;
                             } catch (error) {
@@ -86,21 +132,26 @@ export default class MDocument {
                             }
                         };
 
-                    case "body":
-                    case "head":
-                        return rootElement.querySelector(subElementPrefix + key);
-                    case "documentElement":
+                    case 'body':
+                    case 'head':
+                        return rootElement.querySelector(
+                            subElementPrefix + key
+                        );
+                    case 'documentElement':
                         return rootElement;
-                    case "addEventListener":
+                    case 'addEventListener':
                         return this.handleAddEventListener.bind(this);
-                    case "removeEventListener":
+                    case 'removeEventListener':
                         return this.handleRemoveEventListener.bind(this);
-                    case "defaultView":
+                    case 'defaultView':
                         return rawWindow.__MINI_APP_WINDOW__;
-                    case "location":
+                    case 'location':
                         return rawWindow.__MINI_APP_WINDOW__.location;
                     default:
-                        return tryBindFunctionToRaw(rawDocument, rawDocument[key]);
+                        return tryBindFunctionToRaw(
+                            rawDocument,
+                            rawDocument[key]
+                        );
                 }
             },
         }).proxyInstance;
@@ -108,22 +159,51 @@ export default class MDocument {
         this.patchNode();
     }
 
-    handleAddElement = (parent, newChild, passiveChild = undefined, rawMethod, source = "") => {
-        console.log("handleAddElement",this.options.rootElement, parent, newChild, passiveChild, rawMethod, source);
+    handleAddElement = (
+        parent,
+        newChild,
+        passiveChild = undefined,
+        rawMethod,
+        source = ''
+    ) => {
+        debugger;
+        console.log(
+            'handleAddElement',
+            this.options.rootElement,
+            parent,
+            newChild,
+            passiveChild,
+            rawMethod,
+            source
+        );
         if (this.options.rootElement.contains(parent)) {
+            debugger;
             const { onAddElement } = this.options;
             if (onAddElement) {
-                const replaceElement = onAddElement(parent, newChild, passiveChild, rawMethod, source);
-                console.log("replaceElement", replaceElement);
+                debugger;
+                const replaceElement = onAddElement(
+                    parent,
+                    newChild,
+                    passiveChild,
+                    rawMethod,
+                    source
+                );
+                console.log('replaceElement', replaceElement);
                 if (replaceElement) {
                     return rawMethod.call(parent, replaceElement, passiveChild);
+                } else {
+                    debugger;
+                    return rawMethod.call(parent, newChild, passiveChild);
                 }
             }
 
             if (newChild && newChild.id && !isNaN(newChild.id[0])) {
-                newChild.id = "mini-app-" + newChild.id;
+                newChild.id = 'mini-app-' + newChild.id;
             }
+            debugger;
+            return rawMethod.call(parent, newChild, passiveChild);
         } else {
+            debugger;
             return rawMethod.call(parent, newChild, passiveChild);
         }
     };
@@ -134,14 +214,32 @@ export default class MDocument {
         const rawRemoveChild = this.rawWindow.Node.prototype.removeChild;
         // prototype methods of add element
         const self = this;
-        this.rawWindow.Node.prototype.appendChild = function appendChild(newChild) {
+        this.rawWindow.Node.prototype.appendChild = function appendChild(
+            newChild
+        ) {
             return self.handleAddElement(this, newChild, null, rawAppendChild);
         };
-        this.rawWindow.Node.prototype.insertBefore = function insertBefore(newChild, refChild) {
-            return self.handleAddElement(this, newChild, refChild, rawInsertBefore);
+        this.rawWindow.Node.prototype.insertBefore = function insertBefore(
+            newChild,
+            refChild
+        ) {
+            return self.handleAddElement(
+                this,
+                newChild,
+                refChild,
+                rawInsertBefore
+            );
         };
-        this.rawWindow.Node.prototype.replaceChild = function replaceChild(newChild, oldChild) {
-            return self.handleAddElement(this, newChild, oldChild, rawReplaceChild);
+        this.rawWindow.Node.prototype.replaceChild = function replaceChild(
+            newChild,
+            oldChild
+        ) {
+            return self.handleAddElement(
+                this,
+                newChild,
+                oldChild,
+                rawReplaceChild
+            );
         };
         // Node.prototype.removeChild = function removeChild(oldChild) {
         //     return this.handleAddElement(this, oldChild, null, rawRemoveChild);
@@ -153,10 +251,13 @@ export default class MDocument {
 
         const rawAppend = this.rawWindow.Element.prototype.append;
         const rawPrepend = this.rawWindow.Element.prototype.prepend;
-        this.rawWindow.Element.prototype.setAttribute = function setAttribute(key, value) {
+        this.rawWindow.Element.prototype.setAttribute = function setAttribute(
+            key,
+            value
+        ) {
             if (
-                (key === "src" && /^(img|script)$/i.test(this.tagName)) ||
-                (key === "href" && /^link$/i.test(this.tagName))
+                (key === 'src' && /^(img|script)$/i.test(this.tagName)) ||
+                (key === 'href' && /^link$/i.test(this.tagName))
             ) {
                 // TODO: 补全URL
                 rawSetAttribute.call(this, key, value);
