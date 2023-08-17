@@ -2,7 +2,11 @@
     "name": "minister-packages",
     "private": true,
     "scripts": {
-        "start": "nx run-many --target=start --projects=main-vite,child-react17 --parallel"
+        "start": "nx run-many --target=start --projects=main-vite,child-react17 --parallel",
+        "build": "nx run-many --target=build --projects=packages/* --parallel",
+        "test": "nx run-many --target=test --projects=packages/* --parallel",
+        "lint": "nx run-many --target=lint --projects=packages/* --parallel",
+        "graph": "nx dep-graph"
     },
     "devDependencies": {
         "@changesets/cli": "^2.26.2",

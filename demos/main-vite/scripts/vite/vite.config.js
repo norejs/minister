@@ -16,12 +16,12 @@ export default defineConfig({
         alias: [
             {
                 find: 'minister',
-                replacement: resolvePkgPath('minister'),
+                replacement: resolvePkgPath('minister/src'),
             },
 
             {
                 find: '@minister/sandbox-iframe',
-                replacement: resolvePkgPath('sandbox-iframe'),
+                replacement: resolvePkgPath('sandbox-iframe/src'),
             },
             {
                 find: '@minister/sandbox',
