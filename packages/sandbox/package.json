@@ -21,7 +21,6 @@
         "postinstall": "whousepkg"
     },
     "dependencies": {
-        "@latte/whousepkg": "^2.0.0",
         "@minister/utils": "^0.0.0",
         "core-js": "3",
         "es6-proxy-polyfill": "^2.1.1"

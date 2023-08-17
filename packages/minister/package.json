@@ -90,7 +90,6 @@
     },
     "dependencies": {
         "@babel/plugin-proposal-class-properties": "^7.16.7",
-        "@latte/whousepkg": "^2.0.0",
         "@minister/sandbox": "^0.0.0",
         "@minister/sandbox-iframe": "^0.0.0",
         "@minister/utils": "^0.0.0",
