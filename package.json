@@ -4,10 +4,12 @@
     "scripts": {
         "start": "lerna run start --parallel --loglevel verbose",
         "demos": "lerna run demos --parallel --loglevel verbose --scope demos",
-        "start:sandbox": "lerna run start --parallel --loglevel verbose --scope @minister/sandbox-iframe",
-        "postinstall": "lerna bootstrap"
+        "start:sandbox": "lerna run start --parallel --loglevel verbose --scope @minister/sandbox-iframe"
     },
     "devDependencies": {
         "lerna": "^5.3.0"
+    },
+    "volta": {
+        "node": "14.21.3"
     }
 }

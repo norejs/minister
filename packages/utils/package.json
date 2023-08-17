@@ -16,10 +16,11 @@
     ],
     "scripts": {
         "test": "echo \"Error: run tests from root\" && exit 1",
-        "start": "latte start",
-        "build": "latte build"
+        "start": "nore start",
+        "build": "nore build"
     },
     "dependencies": {
+        "@norejs/cli": "^0.0.5",
         "core-js": "3"
     },
     "devDependencies": {

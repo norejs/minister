@@ -10,8 +10,7 @@
         "build": "cross-env NODE_ENV='production' rollup -c && npm run afterbuild",
         "lint": "eslint --cache '**/*.{js,ts}'",
         "afterbuild": "node scripts/after_build.js",
-        "prepublishOnly": "yarn lint && yarn build",
-        "postinstall": "whousepkg"
+        "prepublishOnly": "yarn lint && yarn build"
     },
     "publishConfig": {
         "access": "public"
