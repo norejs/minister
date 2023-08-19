@@ -108,7 +108,6 @@ export default class MWindow {
             // escapeSetterKeyList,
             // escapeProperties: staticEscapeProperties,
             get: (target, key) => {
-                console.log("window get", key,this.rawWindow[key]);
                 switch (key) {
                     case "location":
                         return this.mLocation;
@@ -119,7 +118,7 @@ export default class MWindow {
                 }
             },
             set: (target, key, value) => {
-                console.log("window set", key, value);
+                
             }
         });
         this.proxy = windowProxy.proxyInstance;

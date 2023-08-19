@@ -2,6 +2,7 @@
     "name": "minister-packages",
     "private": true,
     "scripts": {
+        "start": "turbo run start --filter=main-vite --filter=child-react17",
         "build": "turbo run build",
         "test": "turbo run test",
         "lint": "turbo run lint",

@@ -122,7 +122,6 @@ export default class MDocument {
                                 const elements = rootElement[
                                     'querySelector'
                                 ].call(rootElement, '#' + myid);
-                                console.log('getElementById', id, elements);
                                 // markElement(elements, appName, key, id);
                                 return elements;
                             } catch (error) {
@@ -164,15 +163,6 @@ export default class MDocument {
         rawMethod,
         source = ''
     ) => {
-        console.log(
-            'handleAddElement',
-            this.options.rootElement,
-            parent,
-            newChild,
-            passiveChild,
-            rawMethod,
-            source
-        );
         if (this.options.rootElement.contains(parent)) {
             const { onAddElement } = this.options;
             if (onAddElement) {
@@ -183,7 +173,6 @@ export default class MDocument {
                     rawMethod,
                     source
                 );
-                console.log('replaceElement', replaceElement);
                 if (replaceElement) {
                     return rawMethod.call(parent, replaceElement, passiveChild);
                 } else {

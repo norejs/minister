@@ -122,7 +122,7 @@ export default class CreateApp {
             this.sandbox = new SandBoxIframe({
                 appName: this.name,
                 url: this.url,
-                html: this.source.html,
+                html: this.source.html.innerHTML,
                 // styles: [],
                 scripts,
                 onHashChange: (url) => {},

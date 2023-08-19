@@ -1,5 +1,5 @@
-import MiniProxy from "../libs/mini-proxy";
-import { isAbsoluteUrl, isRelativeUrl } from "../libs/url";
+import MiniProxy from '../libs/mini-proxy';
+import { isAbsoluteUrl, isRelativeUrl } from '../libs/url';
 export default class MLocation {
     proxy: ProxyConstructor;
     private rawLocation: Location;
@@ -10,31 +10,42 @@ export default class MLocation {
         const { target: _target = {}, parentLocation, url } = options;
         this.rawLocation = rawLocation;
         this.options = options;
-        this.parentHost = parentLocation.protocol + "//" + parentLocation.host + parentLocation.pathname;
+        this.parentHost =
+            parentLocation.protocol +
+            '//' +
+            parentLocation.host +
+            parentLocation.pathname;
         const childUrl = new URL(url);
 
-        this.childBaseUrl = rawLocation.protocol + rawLocation.host + rawLocation.pathname;
-        console.log(parentLocation, this.rawLocation, childUrl, this.childBaseUrl);
+        this.childBaseUrl =
+            rawLocation.protocol + rawLocation.host + rawLocation.pathname;
         this.rawLocation = rawLocation;
         const convertToChildUrl = this.convertToChildUrl.bind(this);
         var self = this;
 
         this.proxy = new MiniProxy(parentLocation, _target, {
             get: (target, key) => {
-                console.log("get", key);
                 switch (key) {
-                    case "href":
-                        return this.covertToRawUrl(Reflect.get(rawLocation, key));
-                    case "replace":
+                    case 'search':
+                        return rawLocation.search;
+                    case 'hash':
+                        return rawLocation.hash;
+                    case 'href':
+                        return this.covertToRawUrl(
+                            Reflect.get(rawLocation, key)
+                        );
+                    case 'replace':
                         return function (value) {
-                            self.redirect(value, "replace");
+                            self.redirect(value, 'replace');
                         }.bind(rawLocation);
-                    case "pathname":
-                    case "host":
-                    case "hostname":
-                        console.log(childUrl[key]);
+                    case 'origin':
+                    case 'protocol':
+                    case 'port':
+                    case 'pathname':
+                    case 'host':
+                    case 'hostname':
                         return childUrl[key];
-                    case "assign":
+                    case 'assign':
                         return function (value) {
                             value = convertToChildUrl(value);
                             rawLocation.assign(value);
@@ -43,10 +54,10 @@ export default class MLocation {
             },
             set: (target, key, value) => {
                 switch (key) {
-                    case "href":
+                    case 'href':
                         // value = this.convertToChildUrl(value);
-                        if (value.startsWith("#")) {
-                            key = "hash";
+                        if (value.startsWith('#')) {
+                            key = 'hash';
                         }
                         this.redirect(value);
                 }
@@ -54,20 +65,20 @@ export default class MLocation {
             },
         }).proxyInstance;
     }
-    redirect(url, type = "push") {
+    redirect(url, type = 'push') {
         const { parentLocation, onRedirect } = this.options;
         if (onRedirect && onRedirect(url, type)) {
             return true;
         }
         if (isRelativeUrl(url, this.childBaseUrl)) {
         }
-        if (type === "replace") {
+        if (type === 'replace') {
             return parentLocation.replace(url);
         }
         return (parentLocation.href = url);
     }
     convertToChildUrl(url: string) {
-        console.log("pz convertToChildUrl", url, this.childBaseUrl);
+        console.log('pz convertToChildUrl', url, this.childBaseUrl);
         if (url.startsWith(this.options.url)) {
             return url.replace(this.options.url, this.childBaseUrl);
         }
@@ -80,7 +91,7 @@ export default class MLocation {
         return url;
     }
     covertToRawUrl(url: string) {
-        console.log("pz covertToRawUrl", url, this.childBaseUrl);
+        console.log('pz covertToRawUrl', url, this.childBaseUrl);
         if (url.startsWith(this.childBaseUrl)) {
             return url.replace(this.childBaseUrl, this.options.url);
         }

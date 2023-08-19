@@ -1,7 +1,12 @@
-import { fetchContent, Logger, cloneNode, completionPath } from "@minister/utils";
-import MWindow from "./window";
-import MDocument from "./document";
-import MLocation from "./location";
+import {
+    fetchContent,
+    Logger,
+    cloneNode,
+    completionPath,
+} from '@minister/utils';
+import MWindow from './window';
+import MDocument from './document';
+import MLocation from './location';
 declare global {
     interface Window {
         __MINI_APP_ENVIRONMENT__: boolean;
@@ -13,15 +18,15 @@ declare global {
 }
 
 // 监听子应用的时间映射到父应用
-const reflectEvents = ["hashchange", "popstate"];
+const reflectEvents = ['hashchange', 'popstate'];
 
 // strin转换为 blob url
 function objectToBlobUrl(object: any) {
-    const blob = new Blob([object], { type: "text/html" });
+    const blob = new Blob([object], { type: 'text/html' });
     return URL.createObjectURL(blob);
 }
 function toUpperFirstCase(word: string) {
-    return word.replace(/^\w/, w => w.toUpperCase());
+    return word.replace(/^\w/, (w) => w.toUpperCase());
 }
 
 type IMIframeOption = {};
@@ -31,12 +36,9 @@ export default class MIframe {
     document: Document;
     rootElement: HTMLElement;
     options: any;
-    // private miniDocument;
-    // private miniWindow;
     private miniLocation;
     constructor(options = {} as any) {
         this.options = options;
-
         this.registerGlobalFun();
         this.initIframe();
     }
@@ -44,58 +46,28 @@ export default class MIframe {
         return this.rootElement;
     }
     async initIframe() {
-        const { appName = "", url = "", html, hash = "#/", scripts = [], styles = [], onReady } = this.options;
+        const {
+            appName = '',
+            url = '',
+            html,
+            hash = '#/',
+            scripts = [],
+            styles = [],
+            onReady,
+        } = this.options;
         await this.createIframe();
-
-        const document = this.iframe.contentDocument;
-        this.rootElement = document.createElement("mini-app-html");
-        this.iframe.contentWindow.__INIT_MINI_APP();
         onReady && onReady();
-        this.rootElement.innerHTML = html.innerHTML;
-        /**
-         * 这里需要保持script 上的属性一致
-         */
         // 执行js
         for (var i in scripts) {
             await this.execScript(scripts[i]);
         }
-        // const scriptCodes = await Promise.all(
-        //     scripts.map(async (script: string): Promise<string> => {
-        //         const temp = document.createElement("div");
-        //         temp.innerHTML = script;
-        //         const scriptElement = temp.querySelector("script");
-        //         const params = attrsToString(getScriptAttributes(scriptElement));
-        //         if (scriptElement) {
-        //             const src = scriptElement.getAttribute("src");
-        //             if (src) {
-        //                 try {
-        //                     const srcCode = await fetchContent(completionPath(src, url));
-        //                     if (srcCode) {
-        //                         const srcCodeUrl = objectToBlobUrl(this.scopeCode(srcCode));
-        //                         return `<script src=${srcCodeUrl} mini-app-scoped="true" data-src="${src}" ${params}></script>`;
-        //                     }
-        //                 } catch (error) {
-        //                     return script;
-        //                 }
-        //             }
-
-        //             const code = scriptElement.textContent;
-        //             if (code) {
-        //                 return `<script mini-app-scoped="true" ${params}>${this.scopeCode(code)}</script>`;
-        //             }
-        //         }
-        //         // fetchContent(script).then((code) => {
-        //         // tslint-disable-next-line
-        //     })
-        // );
-
         // 构建初始化HTML
     }
     createIframe() {
-        const { url, appName, hash = "#/" } = this.options;
+        const { url, appName, hash = '#/', html } = this.options;
         // TODO: 代码分割
-        this.iframe = document.createElement("iframe");
-        this.iframe.style.display = "none";
+        this.iframe = document.createElement('iframe');
+        this.iframe.style.display = 'none';
         this.iframe.id = appName;
         const iframeUrl = objectToBlobUrl(`
         <html>
@@ -118,14 +90,22 @@ export default class MIframe {
                             return obj;
                         }
                     }
+                    
                 </script>
+                
             </head>
             <body>
+                <mini-app-html>
+                    ${html}
+                </mini-app-html>
+                <script>
+                    window.__INIT_MINI_APP();
+                </script>
             </body>
         </html>
         `);
         return new Promise((resolve, reject) => {
-            this.iframe.setAttribute("src", iframeUrl + hash);
+            this.iframe.setAttribute('src', iframeUrl + hash);
             this.iframe.onload = () => {
                 this.window = this.iframe.contentWindow;
                 this.document = this.iframe.contentDocument;
@@ -136,16 +116,16 @@ export default class MIframe {
         });
     }
     async execScript(script: HTMLScriptElement) {
-        if (typeof script === "string") {
-            const div = this.document.createElement("div");
+        if (typeof script === 'string') {
+            const div = this.document.createElement('div');
             div.innerHTML = script;
-            script = div.querySelector("script");
+            script = div.querySelector('script');
         }
-        if (script.getAttribute("mini-app-scoped") === "true") {
+        if (script.getAttribute('mini-app-scoped') === 'true') {
             return;
         }
-        script.setAttribute("mini-app-scoped", "true");
-        const src = script.getAttribute("src");
+        script.setAttribute('mini-app-scoped', 'true');
+        const src = script.getAttribute('src');
         if (src) {
             return this.execUrlScript(src, true, script);
         }
@@ -161,17 +141,26 @@ export default class MIframe {
      * @param withSandBox
      * @returns
      */
-    async execUrlScript(url: string, withSandBox = true, originScript?: HTMLScriptElement) {
+    async execUrlScript(
+        url: string,
+        withSandBox = true,
+        originScript?: HTMLScriptElement
+    ) {
         if (withSandBox) {
             try {
-                const code = await fetchContent(url, this.iframe.contentWindow as any);
+                const code = await fetchContent(
+                    url,
+                    this.iframe.contentWindow as any
+                );
                 if (code) {
-                    
-                    const scriptElement = this.document.createElement("script");
-                    scriptElement.setAttribute("src", objectToBlobUrl(this.scopeCode(code)));
-                    scriptElement.setAttribute("origin-src", url);
+                    const scriptElement = this.document.createElement('script');
+                    scriptElement.setAttribute(
+                        'src',
+                        objectToBlobUrl(this.scopeCode(code))
+                    );
+                    scriptElement.setAttribute('origin-src', url);
                     copyScriptAttributes(originScript, scriptElement);
-                    scriptElement.setAttribute("ignore-add", "true");
+                    scriptElement.setAttribute('ignore-add', 'true');
                     return this.document.head.appendChild(scriptElement);
                 }
                 // return this.execScriptCode(code, withSandBox, url, originScript);
@@ -179,10 +168,10 @@ export default class MIframe {
                 // debugger;
             }
         }
-        const scriptElement = this.document.createElement("script");
-        scriptElement.setAttribute("src", url);
+        const scriptElement = this.document.createElement('script');
+        scriptElement.setAttribute('src', url);
         copyScriptAttributes(originScript, scriptElement);
-        scriptElement.setAttribute("ignore-add", "true");
+        scriptElement.setAttribute('ignore-add', 'true');
         this.document.head.appendChild(scriptElement);
         await new Promise((resolve, reject) => {
             setTimeout(resolve, 100);
@@ -196,12 +185,17 @@ export default class MIframe {
      * @param withSandBox
      * @param url
      */
-    execScriptCode(code: string, withSandBox = true, url: string = "", originScript?: HTMLScriptElement) {
-        const scriptElement = this.document.createElement("script");
+    execScriptCode(
+        code: string,
+        withSandBox = true,
+        url: string = '',
+        originScript?: HTMLScriptElement
+    ) {
+        const scriptElement = this.document.createElement('script');
         originScript && copyScriptAttributes(originScript, scriptElement);
         scriptElement.textContent = withSandBox ? this.scopeCode(code) : code;
-        url && scriptElement.setAttribute("origin-src", url);
-        scriptElement.setAttribute("ignore-add", "true");
+        url && scriptElement.setAttribute('origin-src', url);
+        scriptElement.setAttribute('ignore-add', 'true');
         this.document.head.appendChild(scriptElement);
         return scriptElement;
     }
@@ -215,21 +209,22 @@ export default class MIframe {
         if (!window[`__MINI_APP_CREATE_PROXY__`]) {
             window[`__MINI_APP_CREATE_PROXY__`] = {};
         }
-        window[`__MINI_APP_CREATE_PROXY__`][appName] = this.createProxyEnvironment.bind(this);
+        window[`__MINI_APP_CREATE_PROXY__`][appName] =
+            this.createProxyEnvironment.bind(this);
     }
 
     private createProxyEnvironment(iframeWindow) {
         const { url, onRedirect } = this.options;
         this.window = iframeWindow;
         this.document = iframeWindow.document;
-
-        this.reflectEvents(this.window, ["hashChange", "popState"]);
+        this.rootElement = iframeWindow.document.querySelector('mini-app-html');
+        this.reflectEvents(this.window, ['hashChange', 'popState']);
 
         const miniLocation = new MLocation(iframeWindow.location, {
             parentLocation: location,
             rawWindow: iframeWindow,
             url,
-            onRedirect: url => {
+            onRedirect: (url) => {
                 return onRedirect && onRedirect(url);
             },
         });
@@ -240,7 +235,6 @@ export default class MIframe {
             location: miniLocation.proxy,
             rawWindow: iframeWindow,
             onAddElement: (parent, newChild) => {
-                console.log("pz", parent, newChild);
                 // 对a标签的点击需要做特殊处理，否则会在父级页面跳转
                 // if (newChild.tagName === "A") {
                 //     return this.patchAchorHref(newChild);
@@ -250,13 +244,13 @@ export default class MIframe {
                 //     return;
                 // }
                 // console.log("pz", newChild, "HTMLScriptElement");
-                if (newChild.tagName === "SCRIPT") {
+                if (newChild.tagName === 'SCRIPT') {
                     // console.log("pz", newChild, "HTMLScriptElement");
                     return this.execScript(newChild);
                 }
             },
             onInjectScript: (_, newChild) => {
-                if (newChild["mini-app-scoped"]) {
+                if (newChild['mini-app-scoped']) {
                     return;
                 }
                 // return this.execScript(newChild);
@@ -270,27 +264,31 @@ export default class MIframe {
             location: miniLocation.proxy,
         });
         // this.miniWindow = miniWindow;
-        return { window: miniWindow.proxy, document: miniDocument.proxy, location: miniLocation.proxy };
+        return {
+            window: miniWindow.proxy,
+            document: miniDocument.proxy,
+            location: miniLocation.proxy,
+        };
     }
 
     // 处理a标签的href
     patchAchorHref(newChild) {
-        newChild.addEventListener("click", event => {
+        newChild.addEventListener('click', (event) => {
             event.preventDefault();
-            const href = newChild.getAttribute("href");
+            const href = newChild.getAttribute('href');
             if (href) {
-                this.miniLocation.proxy["href"] = href;
+                this.miniLocation.proxy['href'] = href;
             }
         });
         return newChild;
     }
 
     reflectEvents(rawObj, events = reflectEvents) {
-        events.forEach(eventName => {
+        events.forEach((eventName) => {
             // 首字母大写
-            if (this.options["on" + toUpperFirstCase(eventName)])
-                rawObj.addEventListener(eventName.toLowerCase(), event => {
-                    this.options["on" + toUpperFirstCase(eventName)](event);
+            if (this.options['on' + toUpperFirstCase(eventName)])
+                rawObj.addEventListener(eventName.toLowerCase(), (event) => {
+                    this.options['on' + toUpperFirstCase(eventName)](event);
                 });
         });
     }
@@ -301,7 +299,10 @@ export default class MIframe {
      * @returns
      */
     replaceThis(code) {
-        return code.replace(/\bthis\b([.\[])/g, `(window.__MINI_APP_REPLACE_THIS(this))$1`);
+        return code.replace(
+            /\bthis\b([.\[])/g,
+            `(window.__MINI_APP_REPLACE_THIS(this))$1`
+        );
     }
     scopeCode(code: string) {
         return `(function (window, self, global, location, document, globalThis) {
@@ -321,7 +322,11 @@ export default class MIframe {
 }
 
 // 复制script 的属性
-function copyScriptAttributes(script: HTMLScriptElement, newScript: HTMLScriptElement, exclude = ["src"]) {
+function copyScriptAttributes(
+    script: HTMLScriptElement,
+    newScript: HTMLScriptElement,
+    exclude = ['src']
+) {
     const attrs = script.attributes;
     for (let i = 0; i < attrs.length; i++) {
         const attr = attrs[i];
@@ -330,7 +335,7 @@ function copyScriptAttributes(script: HTMLScriptElement, newScript: HTMLScriptEl
     }
 }
 
-function getScriptAttributes(script: HTMLScriptElement, exclude = ["src"]) {
+function getScriptAttributes(script: HTMLScriptElement, exclude = ['src']) {
     const attrs = script.attributes;
     const result = {};
     for (let i = 0; i < attrs.length; i++) {
@@ -343,6 +348,6 @@ function getScriptAttributes(script: HTMLScriptElement, exclude = ["src"]) {
 
 function attrsToString(attrs) {
     return Object.keys(attrs)
-        .map(key => `${key}="${attrs[key]}"`)
-        .join(" ");
+        .map((key) => `${key}="${attrs[key]}"`)
+        .join(' ');
 }
