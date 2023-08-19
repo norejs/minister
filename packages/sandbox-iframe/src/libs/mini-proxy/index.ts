@@ -98,7 +98,7 @@ export default class MiniProxy {
                 return set(target, key, value) || this.setter(target, key, value);
             },
             has: (target, key) => {
-                if (scopeProperties.includes(key)) return key in target;
+                if (scopeProperties.includes(key.toString())) return key in target;
                 return key in unscopables || key in target || key in this.rawObject;
             },
             // Object.getOwnPropertyDescriptor(window, key)

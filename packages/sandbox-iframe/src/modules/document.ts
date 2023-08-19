@@ -1,6 +1,4 @@
-import {
-    isBoundFunction,
-} from '@minister/utils';
+import { isBoundFunction } from '@minister/utils';
 import MiniProxy from '../libs/mini-proxy';
 declare global {
     interface Window {
@@ -14,10 +12,22 @@ function tryBindFunctionToRaw(raw, fn) {
     return typeof fn === 'function' && !isBoundFunction(fn) ? fn.bind(raw) : fn;
 }
 
+type DocumentOptions = {
+    rootElement: HTMLElement;
+    rawWindow: Window;
+    target?: any;
+    onAddElement?: Function;
+    subElementPrefix?: string;
+    onInjectScript?: Function;
+};
+
 export default class MDocument {
-    proxy: ProxyConstructor;
+    proxy: MiniProxy;
     private rawWindow: Window;
-    constructor(private rawDocument: Document, private options: any) {
+    constructor(
+        private rawDocument: Document,
+        private options: DocumentOptions
+    ) {
         this.initProxy();
     }
     handleAddEventListener(type, listener, options) {
@@ -59,7 +69,6 @@ export default class MDocument {
     initProxy() {
         const {
             target: initTarget = {},
-            appName,
             rootElement,
             subElementPrefix = 'mini-app-',
             onInjectScript: Function,
@@ -143,7 +152,7 @@ export default class MDocument {
                     case 'defaultView':
                         return rawWindow.__MINI_APP_WINDOW__;
                     case 'location':
-                        return rawWindow.__MINI_APP_WINDOW__.location;
+                        return rawWindow?.__MINI_APP_WINDOW__?.["location"];
                     default:
                         return tryBindFunctionToRaw(
                             rawDocument,
