@@ -1,7 +1,7 @@
 let IS_RUNTIME_DEBUG = false;
 let IS_TEST_HOST = false;
 try {
-    IS_RUNTIME_DEBUG = false;
+    IS_RUNTIME_DEBUG = process.env.NODE_ENV === "development";
     IS_TEST_HOST = window.location.host.indexOf(".test.") > -1 || window.location.host.indexOf("localhost") > -1;
 } catch (error) {}
 

@@ -232,7 +232,7 @@ export default class MIframe {
 
         const miniDocument = new MDocument(iframeWindow.document, {
             rootElement: this.rootElement,
-            location: miniLocation.proxy,
+            location: miniLocation.proxy as unknown as Location,
             rawWindow: iframeWindow,
             onAddElement: (parent, newChild) => {
                 // 对a标签的点击需要做特殊处理，否则会在父级页面跳转

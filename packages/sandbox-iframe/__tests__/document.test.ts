@@ -15,7 +15,7 @@ beforeAll(() => {
     document.body.appendChild(iframe);
     iframeWindow = iframe.contentWindow as Window;
     iframeDocument = iframeWindow?.document;
-    rootElement = document.createElement('div');
+    rootElement = iframeDocument.createElement('div');
     rootElement.id = 'root';
     rootElement.innerHTML = `<mini-app-head></mini-app-head><mini-app-body></mini-app-body>`;
     document.body.appendChild(rootElement);
@@ -32,12 +32,12 @@ test('init MDocument', () => {
 
 test('query body', () => {
     expect(sandboxDocument.body.tagName).toBe('MINI-APP-BODY');
-    expect(sandboxDocument.querySelector('body')).toBeInstanceOf(HTMLElement);
+    expect(sandboxDocument.querySelector('body')).toBeInstanceOf(iframeWindow.HTMLElement);
 });
 
 test('query head', () => {
     expect(sandboxDocument.head.tagName).toBe('MINI-APP-HEAD');
-    expect(sandboxDocument.querySelector('head')).toBeInstanceOf(HTMLElement);
+    expect(sandboxDocument.querySelector('head')).toBeInstanceOf(iframeWindow.HTMLElement);
 });
 
 test('insert dom', () => {

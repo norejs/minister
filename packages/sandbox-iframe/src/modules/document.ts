@@ -1,4 +1,4 @@
-import { isBoundFunction } from '@minister/utils';
+import { isBoundFunction, Logger } from '@minister/utils';
 import MiniProxy from '../libs/mini-proxy';
 declare global {
     interface Window {
@@ -19,6 +19,7 @@ type DocumentOptions = {
     onAddElement?: Function;
     subElementPrefix?: string;
     onInjectScript?: Function;
+    location?: Location;
 };
 
 export default class MDocument {
@@ -152,7 +153,7 @@ export default class MDocument {
                     case 'defaultView':
                         return rawWindow.__MINI_APP_WINDOW__;
                     case 'location':
-                        return rawWindow?.__MINI_APP_WINDOW__?.["location"];
+                        return rawWindow?.__MINI_APP_WINDOW__?.['location'];
                     default:
                         return tryBindFunctionToRaw(
                             rawDocument,
