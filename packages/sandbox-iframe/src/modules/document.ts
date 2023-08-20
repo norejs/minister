@@ -81,13 +81,6 @@ export default class MDocument {
         this.proxy = new MiniProxy(this.rawDocument, initTarget, {
             get: (target, key) => {
                 switch (key) {
-                    // case "createElement":
-                    // case "createElementNS":
-                    // case "createDocumentFragment":
-                    //     return ((...args) => {
-                    //         const element = rawDocument[key].apply(rawDocument, args);
-                    //         return markElement(element, appName, key, args);
-                    //     }).bind(rawDocument);
                     case 'querySelector':
                     case 'querySelectorAll':
                         // 替换html,head和body
@@ -100,7 +93,6 @@ export default class MDocument {
                                 rootElement,
                                 ...args
                             );
-                            // markElement(elements, appName, key, args);
                             return elements;
                         };
                     case 'getElementsByTagName':
@@ -112,7 +104,6 @@ export default class MDocument {
                             const elements = rootElement[
                                 'querySelectorAll'
                             ].call(rootElement, ...args);
-                            // markElement(elements, appName, key, args);
                             return elements;
                         };
                     case 'getElementsByClassName':
@@ -120,7 +111,6 @@ export default class MDocument {
                             const elements = rootElement[
                                 'querySelectorAll'
                             ].call(rootElement, ' .' + key);
-                            // markElement(elements, appName, className, className);
                             return elements;
                         };
                     case 'getElementById':

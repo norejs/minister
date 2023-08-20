@@ -101,9 +101,4 @@ export default class MLocation {
         }
         return url;
     }
-
-    // 三种URL相互转换
-    // 父应用Location
-    // 子应用原本的Location
-    // 子应用现有的Location
 }

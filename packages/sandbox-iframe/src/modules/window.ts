@@ -3,7 +3,6 @@ import MiniProxy from "../libs/mini-proxy";
 export const staticEscapeProperties = ["System", "__cjsWrapper", "__REACT_ERROR_OVERLAY_GLOBAL_HOOK__"];
 
 // 只能赋值给rawWindow的变量,
-// TODO: location 也需要代理
 export const escapeSetterKeyList = [];
 
 // with(window){}下不代理的属性
@@ -94,7 +93,6 @@ export default class MWindow {
                         return res.bind(this.rawWindow.history);
                     }
                     return res;
-                    // return Reflect.get(this.rawWindow.history, key).bind(this.rawWindow.history);
                 },
                 set: (target, key, value) => {
                     return Reflect.set(this.rawWindow.history, key, value);
@@ -104,17 +102,12 @@ export default class MWindow {
         const windowProxy = new MiniProxy(this.rawWindow, miniWindow, {
             selfKeys: ["self", "window", "globalThis", "this"],
             unscopables,
-            // scopeProperties,
-            // escapeSetterKeyList,
-            // escapeProperties: staticEscapeProperties,
             get: (target, key) => {
                 switch (key) {
                     case "location":
                         return this.mLocation;
                     case "document":
                         return this.mDocument;
-                    // case "history":
-                    //     return historyProxy;
                 }
             },
             set: (target, key, value) => {

@@ -42,7 +42,7 @@ export default class MIframe {
     private rootElement: HTMLElement;
     private options: any;
     private miniLocation;
-    constructor(options:IMIframeOption) {
+    constructor(options: IMIframeOption) {
         this.options = options;
         this.registerGlobalFun();
         this.initIframe();
@@ -52,12 +52,7 @@ export default class MIframe {
     }
     async initIframe() {
         const {
-            appName = '',
-            url = '',
-            html,
-            hash = '#/',
             scripts = [],
-            styles = [],
             onReady,
         } = this.options;
         await this.createIframe();
@@ -126,7 +121,6 @@ export default class MIframe {
                 this.window = this.iframe.contentWindow;
                 this.document = this.iframe.contentDocument;
                 resolve(this.iframe);
-                // URL.revokeObjectURL(iframeUrl);
             };
             document.body.appendChild(this.iframe);
         });
@@ -179,10 +173,7 @@ export default class MIframe {
                     scriptElement.setAttribute('ignore-add', 'true');
                     return this.document.head.appendChild(scriptElement);
                 }
-                // return this.execScriptCode(code, withSandBox, url, originScript);
-            } catch (error) {
-                // debugger;
-            }
+            } catch (error) {}
         }
         const scriptElement = this.document.createElement('script');
         scriptElement.setAttribute('src', url);
@@ -251,17 +242,7 @@ export default class MIframe {
             location: miniLocation.proxy as unknown as Location,
             rawWindow: iframeWindow,
             onAddElement: (parent, newChild) => {
-                // 对a标签的点击需要做特殊处理，否则会在父级页面跳转
-                // if (newChild.tagName === "A") {
-                //     return this.patchAchorHref(newChild);
-                // }
-                // if (newChild.tagName === "STYLE") {
-                //     // TODO: 处理style标签
-                //     return;
-                // }
-                // console.log("pz", newChild, "HTMLScriptElement");
                 if (newChild.tagName === 'SCRIPT') {
-                    // console.log("pz", newChild, "HTMLScriptElement");
                     return this.execScript(newChild);
                 }
             },
@@ -269,10 +250,8 @@ export default class MIframe {
                 if (newChild['mini-app-scoped']) {
                     return;
                 }
-                // return this.execScript(newChild);
             },
         });
-        // this.miniDocument = miniDocument;
 
         const miniWindow = new MWindow(iframeWindow, {
             rootElement: this.rootElement,
