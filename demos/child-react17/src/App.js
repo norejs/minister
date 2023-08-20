@@ -1,5 +1,4 @@
 import { Link, Outlet } from 'react-router-dom';
-import { useRef, useEffect } from 'react';
 import './App.css';
 import LocationTests from './tests/LocationTests';
 import DomTests from './tests/DomTests';
