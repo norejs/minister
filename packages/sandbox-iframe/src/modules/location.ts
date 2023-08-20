@@ -84,7 +84,6 @@ export default class MLocation {
         return (parentLocation.href = url);
     }
     convertToChildUrl(url: string) {
-        console.log('pz convertToChildUrl', url, this.childBaseUrl);
         if (url.startsWith(this.options.url)) {
             return url.replace(this.options.url, this.childBaseUrl);
         }

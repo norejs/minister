@@ -20,7 +20,7 @@ export default class Sandbox {
         this.init();
     }
     private init() {
-        this.sandboxContainer = new MIframe(this.options);
+        this.sandboxContainer = new MIframe(this.options as any);
     }
     getRootElement() {
         return this.sandboxContainer.getRootElement();

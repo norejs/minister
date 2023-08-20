@@ -1,9 +1,4 @@
-import {
-    fetchContent,
-    Logger,
-    cloneNode,
-    completionPath,
-} from '@minister/utils';
+import { fetchContent } from '@minister/utils';
 import MWindow from './window';
 import MDocument from './document';
 import MLocation from './location';
@@ -41,13 +36,13 @@ type IMIframeOption = {
     onUrlChanged?: (event: HashChangeEvent) => void;
 };
 export default class MIframe {
-    iframe: HTMLIFrameElement;
-    window: Window;
-    document: Document;
-    rootElement: HTMLElement;
-    options: any;
+    private iframe: HTMLIFrameElement;
+    private window: Window;
+    private document: Document;
+    private rootElement: HTMLElement;
+    private options: any;
     private miniLocation;
-    constructor(options = {} as any) {
+    constructor(options:IMIframeOption) {
         this.options = options;
         this.registerGlobalFun();
         this.initIframe();

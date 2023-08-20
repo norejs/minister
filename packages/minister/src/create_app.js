@@ -4,8 +4,6 @@ import { cloneContainer } from './libs/utils';
 import dispatchLifecyclesEvent from './interact/lifecycles_event';
 import SandBoxIframe from '@minister/sandbox-iframe';
 import { cacheMaps } from './cache';
-import minister from './minister';
-import { isRelativeUrl } from '@minister/utils';
 /**
  * micro app instances
  * @type {Map<string, CreateApp>}
@@ -117,7 +115,6 @@ export default class CreateApp {
             const { html: scriptStr } = script;
             scriptStr && scripts.push(scriptStr);
         });
-        console.log(location.hash.replace(this.baseroute, ''));
         if (!this.sandbox) {
             this.sandbox = new SandBoxIframe({
                 appName: this.name,
