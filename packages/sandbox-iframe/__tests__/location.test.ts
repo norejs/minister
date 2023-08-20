@@ -18,7 +18,6 @@ beforeAll(() => {
         parentLocation: window.location,
         url: 'http://localhost:3000',
         onRedirect: (url) => {
-            console.log('pz onRedirect', url);
             return true;
         },
     });

@@ -125,6 +125,18 @@ export default class CreateApp {
                 html: this.source.html.innerHTML,
                 // styles: [],
                 scripts,
+                onUrlChanged: (event) => {
+                    console.log('onUrlChanged', event);
+                    if (event.type === 'hashchange') {
+                        const url = event.newURL;
+                        const hash = url.split('#')[1];
+                        window.history.replaceState(
+                            null,
+                            '',
+                            '#' + this.baseroute + hash
+                        );
+                    }
+                },
                 onHashChange: (url) => {},
                 onPopState: (url) => {},
                 onReady: () => {
@@ -140,9 +152,7 @@ export default class CreateApp {
     }
     onRedirect(url, type) {
         // 是否同一个应用
-        if (isRelativeUrl(url, this.url)) {
-            return true;
-        }
+
         const event = dispatchLifecyclesEvent(
             this.container,
             this.name,

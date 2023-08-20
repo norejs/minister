@@ -1,5 +1,12 @@
 import MiniProxy from '../libs/mini-proxy';
-import { isAbsoluteUrl, isRelativeUrl } from '../libs/url';
+import { isOnlyHashDiffrent, isRelativeUrl } from '../libs/url';
+
+type MLocationOptions = {
+    parentLocation: Location;
+    url: string;
+    onRedirect: (url: string) => boolean;
+    target?: any;
+}
 export default class MLocation {
     proxy: ProxyConstructor;
     private rawLocation: Location;
@@ -55,11 +62,12 @@ export default class MLocation {
             set: (target, key, value) => {
                 switch (key) {
                     case 'href':
-                        // value = this.convertToChildUrl(value);
-                        if (value.startsWith('#')) {
-                            key = 'hash';
+                        return this.redirect(value, 'push');
+                    case 'hash':
+                        if (!value.startsWith('#')) {
+                            value = '#' + value;
                         }
-                        this.redirect(value);
+                        return this.redirect(value, 'push');
                 }
                 return Reflect.set(rawLocation, key, value);
             },
@@ -67,10 +75,8 @@ export default class MLocation {
     }
     redirect(url, type = 'push') {
         const { parentLocation, onRedirect } = this.options;
-        if (onRedirect && onRedirect(url, type)) {
-            return true;
-        }
-        if (isRelativeUrl(url, this.childBaseUrl)) {
+        if (isOnlyHashDiffrent(url, this.options.url)) {
+            return Reflect.set(this.rawLocation, 'hash', url);
         }
         if (type === 'replace') {
             return parentLocation.replace(url);
@@ -91,7 +97,6 @@ export default class MLocation {
         return url;
     }
     covertToRawUrl(url: string) {
-        console.log('pz covertToRawUrl', url, this.childBaseUrl);
         if (url.startsWith(this.childBaseUrl)) {
             return url.replace(this.childBaseUrl, this.options.url);
         }

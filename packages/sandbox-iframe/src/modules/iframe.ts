@@ -29,7 +29,17 @@ function toUpperFirstCase(word: string) {
     return word.replace(/^\w/, (w) => w.toUpperCase());
 }
 
-type IMIframeOption = {};
+type IMIframeOption = {
+    appName: string;
+    url: string;
+    html: string;
+    hash?: string;
+    scripts?: string[];
+    styles?: string[];
+    onReady?: () => void;
+    onRedirect?: (url: string) => boolean;
+    onUrlChanged?: (event: HashChangeEvent) => void;
+};
 export default class MIframe {
     iframe: HTMLIFrameElement;
     window: Window;
@@ -56,12 +66,22 @@ export default class MIframe {
             onReady,
         } = this.options;
         await this.createIframe();
+        this.bindUrlChange();
         onReady && onReady();
         // 执行js
         for (var i in scripts) {
             await this.execScript(scripts[i]);
         }
         // 构建初始化HTML
+    }
+    bindUrlChange() {
+        const { onUrlChanged } = this.options;
+        this.window.addEventListener('hashchange', (event) => {
+            onUrlChanged && onUrlChanged(event);
+        });
+        this.window.addEventListener('popstate', (event) => {
+            onUrlChanged && onUrlChanged(event);
+        });
     }
     createIframe() {
         const { url, appName, hash = '#/', html } = this.options;

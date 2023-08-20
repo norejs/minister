@@ -1,9 +1,7 @@
 import { render } from 'react-dom';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 
-import Expenses, { Item } from './views/Expenses.jsx';
-import Invoices from './views/Invoices.jsx';
-import Invoice from './views/Invoice.jsx';
+import LocationView from './views/LocationView';
 import App from './App';
 
 import './index.css';
@@ -18,6 +16,7 @@ render(
     <HashRouter basename={'/'}>
         <Routes>
             <Route path="/" element={<App />}></Route>
+            <Route path="/location" element={<LocationView />}></Route>
         </Routes>
     </HashRouter>,
     rootElement

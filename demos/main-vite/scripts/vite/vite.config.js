@@ -12,6 +12,9 @@ export default defineConfig({
             preventAssignment: true,
         }),
     ],
+    server: {
+        open: true,
+    },
     resolve: {
         alias: [
             {
