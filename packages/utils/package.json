@@ -14,7 +14,6 @@
         "dist"
     ],
     "scripts": {
-        "test": "echo \"Error: run tests from root\" && exit 1",
         "start": "nore start",
         "build": "nore build"
     },

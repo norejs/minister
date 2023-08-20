@@ -16,7 +16,8 @@
   "scripts": {
     "test": "jest",
     "start": "nore start",
-    "build": "nore build"
+    "build": "nore build",
+    "e2e": "playwright test && playwright show-report"
   },
   "dependencies": {
     "@minister/utils": "^0.0.0",

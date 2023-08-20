@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function Home() {
     return (
         <div>
-            <Link to="/child">加载子应用/child</Link>
+            <Link to="/child">to child</Link>
             <br></br>
             <Link to="/shop">加载子应用/shop</Link>
             <br></br>

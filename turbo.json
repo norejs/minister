@@ -4,9 +4,14 @@
         "build": {
             "outputs": ["dist/**"]
         },
-        "start":{
+        "start": {
             "cache": false
         },
-        "lint": {}
+        "e2e": {
+            "cache": true
+        },
+        "test": {
+            "cache": true
+        }
     }
 }

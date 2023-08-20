@@ -5,6 +5,7 @@
         "start": "turbo run start --filter=main-vite --filter=child-react17",
         "build": "turbo run build",
         "test": "turbo run test",
+        "e2e": "turbo run e2e",
         "lint": "turbo run lint",
         "graph": "nx dep-graph"
     },
