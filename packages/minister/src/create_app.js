@@ -117,16 +117,16 @@ export default class CreateApp {
             const { html: scriptStr } = script;
             scriptStr && scripts.push(scriptStr);
         });
-
+        console.log(location.hash.replace(this.baseroute, ''));
         if (!this.sandbox) {
             this.sandbox = new SandBoxIframe({
                 appName: this.name,
                 url: this.url,
+                hash: location.hash.replace(this.baseroute, ''),
                 html: this.source.html.innerHTML,
                 // styles: [],
                 scripts,
                 onUrlChanged: (event) => {
-                    console.log('onUrlChanged', event);
                     if (event.type === 'hashchange') {
                         const url = event.newURL;
                         const hash = url.split('#')[1];

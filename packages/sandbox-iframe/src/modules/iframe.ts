@@ -89,7 +89,7 @@ export default class MIframe {
         this.iframe = document.createElement('iframe');
         this.iframe.style.display = 'none';
         this.iframe.id = appName;
-        const iframeUrl = objectToBlobUrl(`
+        let iframeUrl = objectToBlobUrl(`
         <html>
             <head>
                 <base href="${url}">
@@ -124,8 +124,9 @@ export default class MIframe {
             </body>
         </html>
         `);
+        iframeUrl += hash;
         return new Promise((resolve, reject) => {
-            this.iframe.setAttribute('src', iframeUrl + hash);
+            this.iframe.setAttribute('src', iframeUrl);
             this.iframe.onload = () => {
                 this.window = this.iframe.contentWindow;
                 this.document = this.iframe.contentDocument;

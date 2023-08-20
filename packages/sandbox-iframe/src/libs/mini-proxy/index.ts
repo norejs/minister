@@ -1,5 +1,5 @@
-import { isString, noop, unique, bindFunctionToRaw } from "@minister/utils";
-import { IProxyOptions } from "./types";
+import { isString, noop, unique, bindFunctionToRaw } from '@minister/utils';
+import { IProxyOptions } from './types';
 
 /**
  * 通用劫持原生对象类
@@ -26,14 +26,19 @@ export default class MiniProxy {
     }
 
     private getter(target, key) {
-        const { selfKeys = [], scopeProperties = [], scopePropertyKeyPrefix = "", unscopables = [] } = this.options;
+        const {
+            selfKeys = [],
+            scopeProperties = [],
+            scopePropertyKeyPrefix = '',
+            unscopables = [],
+        } = this.options;
         // 配合 with 不会在当前作用域寻找 unscopables属性
         if (key === Symbol.unscopables) return unscopables;
         // 访问自身元素
         if (selfKeys.includes(key)) {
             return this.proxyInstance;
         }
-        if (key === "hasOwnProperty") return this.hasOwnProperty;
+        if (key === 'hasOwnProperty') return this.hasOwnProperty;
         // 特殊处理
         if (Reflect.has(target, key)) {
             return Reflect.get(target, key);
@@ -41,7 +46,11 @@ export default class MiniProxy {
         if (scopeProperties.includes(key)) {
             return Reflect.get(target, key);
         }
-        if (scopePropertyKeyPrefix && isString(key) && new RegExp(`/^${scopePropertyKeyPrefix}/`).test(key)) {
+        if (
+            scopePropertyKeyPrefix &&
+            isString(key) &&
+            new RegExp(`/^${scopePropertyKeyPrefix}/`).test(key)
+        ) {
             return Reflect.get(target, key);
         }
         const rawValue = Reflect.get(this.rawObject, key);
@@ -64,7 +73,10 @@ export default class MiniProxy {
             this.rawObject.hasOwnProperty(key) &&
             !scopeProperties.includes(key)
         ) {
-            const descriptor = Object.getOwnPropertyDescriptor(this.rawObject, key);
+            const descriptor = Object.getOwnPropertyDescriptor(
+                this.rawObject,
+                key
+            );
             const { writable, configurable, enumerable } = descriptor || {};
             if (writable) {
                 Object.defineProperty(target, key, {
@@ -84,34 +96,49 @@ export default class MiniProxy {
             this.escapeKeys.add(key);
         }
 
-        return Reflect.set(this.rawObject, key, value);;
+        return Reflect.set(this.rawObject, key, value);
     }
     createProxy() {
-        const { scopeProperties = [], unscopables = [], set = noop, get = noop } = this.options;
+        const {
+            scopeProperties = [],
+            unscopables = [],
+            set = noop,
+            get = noop,
+        } = this.options;
         return (this.proxyInstance = new Proxy(this.target, {
             // 入参目标对象、属性名和 proxy 实例本身
             get: (target, key) => {
-                return get(target, key) || this.getter(target, key);
+                let res = get(target, key);
+                if (typeof res !== 'undefined') return res;
+                return this.getter(target, key);
             },
             // 目标对象、属性名、属性值和 Proxy 实例本身
             set: (target, key, value) => {
-                return set(target, key, value) || this.setter(target, key, value);
+                return (
+                    set(target, key, value) || this.setter(target, key, value)
+                );
             },
             has: (target, key) => {
-                if (scopeProperties.includes(key.toString())) return key in target;
-                return key in unscopables || key in target || key in this.rawObject;
+                if (scopeProperties.includes(key.toString()))
+                    return key in target;
+                return (
+                    key in unscopables || key in target || key in this.rawObject
+                );
             },
             // Object.getOwnPropertyDescriptor(window, key)
             // TODO: use set
             getOwnPropertyDescriptor: (target, key) => {
                 if (target.hasOwnProperty(key)) {
-                    this.descriptorTargetMap.set(key, "target");
+                    this.descriptorTargetMap.set(key, 'target');
                     return Object.getOwnPropertyDescriptor(target, key);
                 }
                 if (this.rawObject.hasOwnProperty(key)) {
                     // like console, alert ...
-                    this.descriptorTargetMap.set(key, "this.rawObject");
-                    const descriptor = Object.getOwnPropertyDescriptor(this.rawObject, key);
+                    this.descriptorTargetMap.set(key, 'this.rawObject');
+                    const descriptor = Object.getOwnPropertyDescriptor(
+                        this.rawObject,
+                        key
+                    );
                     if (descriptor && !descriptor.configurable) {
                         descriptor.configurable = true;
                     }
@@ -123,22 +150,27 @@ export default class MiniProxy {
             // 注意安卓/ios低版本无法拦截此方法 @See https://github.com/ambit-tsai/es6-proxy-polyfill
             defineProperty: (target, key, value) => {
                 const from = this.descriptorTargetMap.get(key);
-                if (from === "this.rawObject") {
+                if (from === 'this.rawObject') {
                     return Reflect.defineProperty(this.rawObject, key, value);
                 }
                 return Reflect.defineProperty(target, key, value);
             },
             // 注意安卓/ios低版本无法拦截此方法
             // 用来拦截对象自身属性的读取操作。 拦截特定的几个方法，包括 Object.getOwnPropertyNames(window)
-            ownKeys: target => {
-                return unique(Reflect.ownKeys(this.rawObject).concat(Reflect.ownKeys(target)));
+            ownKeys: (target) => {
+                return unique(
+                    Reflect.ownKeys(this.rawObject).concat(
+                        Reflect.ownKeys(target)
+                    )
+                );
             },
             // 注意安卓/ios低版本无法拦截此方法
             // 用于拦截delete操作，如果这个方法抛出错误或者返回false，当前属性就无法被delete命令删除。
             deleteProperty: (target, key) => {
                 if (target.hasOwnProperty(key)) {
                     this.injectedKeys.has(key) && this.injectedKeys.delete(key);
-                    this.escapeKeys.has(key) && Reflect.deleteProperty(this.rawObject, key);
+                    this.escapeKeys.has(key) &&
+                        Reflect.deleteProperty(this.rawObject, key);
                     return Reflect.deleteProperty(target, key);
                 }
                 return true;
@@ -146,11 +178,11 @@ export default class MiniProxy {
         }));
     }
     clear() {
-        this.injectedKeys.forEach(key => {
+        this.injectedKeys.forEach((key) => {
             Reflect.deleteProperty(this.target, key as string);
         });
         this.injectedKeys.clear();
-        this.escapeKeys.forEach(key => {
+        this.escapeKeys.forEach((key) => {
             Reflect.deleteProperty(this.rawObject, key as string);
         });
         this.escapeKeys.clear();

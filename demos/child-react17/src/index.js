@@ -8,12 +8,9 @@ import './index.css';
 
 // 如需使用 history模式 ，直接将HashRouter替换为BrowserRouter [指南Tutorial](https://reactrouter.com/docs/en/v6/getting-started/tutorial)
 const rootElement = document.getElementById('root');
-
-window.__MINI_APP_BASE_ROUTE__ = '/child';
 console.log(window.location.hash);
 render(
-    // basename={window.__MINI_APP_BASE_ROUTE__ || "/"}
-    <HashRouter basename={'/'}>
+    <HashRouter>
         <Routes>
             <Route path="/" element={<App />}></Route>
             <Route path="/location" element={<LocationView />}></Route>
