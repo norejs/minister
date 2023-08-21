@@ -1,5 +1,7 @@
 import MDocument from '../src/modules/document';
-
+/**
+ * @jest-environment jsdom
+ */
 let iframe: HTMLIFrameElement;
 let iframeWindow: Window;
 let iframeDocument: Document;

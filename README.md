@@ -18,7 +18,7 @@
 
 ## 模块设计图
 
-![Untitled](assets/clas-design.png)
+![Untitled](assets/class-design.png)
 
 # 项目目录
 
