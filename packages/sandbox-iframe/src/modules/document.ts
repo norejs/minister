@@ -1,5 +1,6 @@
 import { isBoundFunction, Logger } from '@minister/utils';
 import MiniProxy from '../libs/mini-proxy';
+
 declare global {
     interface Window {
         Element: any;
@@ -31,6 +32,7 @@ export default class MDocument {
     ) {
         this.initProxy();
     }
+    // TODO: 优化EventList
     handleAddEventListener(type, listener, options) {
         if (
             [

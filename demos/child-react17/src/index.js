@@ -8,7 +8,13 @@ import './index.css';
 
 // 如需使用 history模式 ，直接将HashRouter替换为BrowserRouter [指南Tutorial](https://reactrouter.com/docs/en/v6/getting-started/tutorial)
 const rootElement = document.getElementById('root');
-console.log(window.location.hash);
+window.addEventListener('DOMContentLoaded',function(){
+    this.alert('domeloaded')
+})
+window.addEventListener('load',function(){
+    this.alert('load');
+})
+
 render(
     <HashRouter>
         <Routes>

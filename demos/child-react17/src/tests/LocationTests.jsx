@@ -1,6 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LocationInfo from '../components/LocationInfo';
+
+
+document.addEventListener('touchmove', (e) => {
+    console.log('touchmove', e);
+});
 export default function LocationTests() {
     return (
         <div>
